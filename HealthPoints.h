@@ -1,10 +1,9 @@
-//
-// Created by 222ro on 21-May-22.
-//
 
 #ifndef MATAM_EX2_HEALTHPOINTS_H
 #define MATAM_EX2_HEALTHPOINTS_H
 #include <iostream>
+
+const int DEFAULT_MAXHP = 100;
 
 class HealthPoints {
 public:
@@ -15,7 +14,7 @@ public:
      * @param maxHP - maxHP of the object. initializes m_currentHP and m_maxHP to parameter's value.
      * Throws an "Invalid Argument" exception upon non-natural value.
      */
-    HealthPoints(const int maxHP = 100);
+    HealthPoints(const int maxHP = DEFAULT_MAXHP);
 
     HealthPoints(const HealthPoints& healthPoints) = default;
 
@@ -86,7 +85,6 @@ private:
 };
 
 // ------------------------------ HEALTH POINTS ADDITIONAL ARITHMETICAL OPERATORS ------------------------------ //
-// TODO: need to deal with symmetry
 
 HealthPoints operator+(const int pointsToAdd, const HealthPoints& healthPoints);
 

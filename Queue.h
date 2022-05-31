@@ -4,7 +4,8 @@
 #include <new>
 #include <assert.h>
 
-// TODO: Make it generic when finished testing
+// --------------------------------------- Queue Data Structure --------------------------------------- //
+
 template<class T>
 class Queue {
 public:
@@ -28,6 +29,7 @@ public:
     /**
      *  @return
      *      A reference to the first value in the queue.
+     * Supports Const Queue.
      */
     T& front();
 
@@ -39,7 +41,7 @@ public:
      */
     int size() const;
     
-    
+
     class Iterator;
     
     Iterator begin();
@@ -49,11 +51,25 @@ public:
     
     ConstIterator begin() const;
     ConstIterator end() const;
-    
+
+    /**
+     * Destructor of Queue class.
+     */
     ~Queue();
 
+    /**
+     * Copy Constructor of Queue class.
+     */
     Queue(const Queue& queue);
+
+    /**
+     * Assignment operator of Queue class
+     *
+     * @return
+     *      Assigned instance of Queue Object
+     */
     Queue& operator=(const Queue& queue);
+
     /**
     *  A class for EmptyQueue exception.
     *
@@ -61,7 +77,10 @@ public:
     *  points to the end of the queue.
     */
     class EmptyQueue {};
-    
+
+// --------------------------------------- QNode Class --------------------------------------- //
+// ----------------------------- Used to store the data on Queue ----------------------------- //
+
 private:
     class QNode {
     public:
@@ -79,14 +98,22 @@ private:
         QNode& operator=(const QNode&) = default;
     };
 
+// --------------------------------------- Queue Fields --------------------------------------- //
+
     QNode* m_front;
     QNode* m_back;
     int m_size;
+
+// ---------------------------------- Queue Private Functions ---------------------------------- //
 
     void emptyQueue();
     void copyQueue(const Queue& queue, Queue& newQueue);
     bool isEmpty() const;
 };
+
+
+// --------------------------------------- Iterator Class --------------------------------------- //
+// --------------------------- Supports Read/Write Iteration on Queue --------------------------- //
 
 template<class T>
 class Queue<T>::Iterator {
@@ -148,6 +175,10 @@ private:
     friend class Queue;
 };
 
+
+// --------------------------------------- ConstIterator Class --------------------------------------- //
+// -------------------------------- Supports Read Only Iteration on Queue -------------------------------- //
+
 template<class T>
 class Queue<T>::ConstIterator {
 public:
@@ -172,9 +203,20 @@ private:
     friend class Queue;
 };
 
-
+/**
+ * Transforms the values of recieved queue according to a recieved changing function.
+ *
+ * @tparam TransformFunction  - void Functor that transforms an object he gets as argument to another one
+ * @tparam T  - Generic Object
+ * @param queue  - changed queue
+ * @param transform  - the actual transforming function
+ */
 template<class TransformFunction, class T>
 void transform(Queue<T>& queue, TransformFunction transform);
+
+
+// --------------------------------------- Function Implementations --------------------------------------- //
+
 
 template<class T>
 Queue<T>::Queue():
@@ -182,6 +224,7 @@ Queue<T>::Queue():
     m_back(nullptr),
     m_size(0)
 {}
+
 
 template<class T>
 void Queue<T>::pushBack(const T& value) {
@@ -328,7 +371,6 @@ Queue<T>::QNode::QNode(const T& data):
 
 template<class T>
 T& Queue<T>::Iterator::operator*() const {
-    // TODO: Is it the correct exception?
     if(m_currentNode == nullptr) {
         throw InvalidOperation();
     }
@@ -366,7 +408,6 @@ Queue<T>::Iterator::Iterator(Queue* queue, QNode* node):
 
 template<class T>
 const T& Queue<T>::ConstIterator::operator*() const {
-    // TODO: Is it the correct exception?
     if(m_currentNode == nullptr) {
         throw InvalidOperation();
     }
